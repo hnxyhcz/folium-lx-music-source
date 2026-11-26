@@ -1,0 +1,16 @@
+{
+  "folium": 2,
+  "id": "lx-music-source",
+  "name": "洛雪音源适配",
+  "version": "1.0.0",
+  "author": "hnxyhcz",
+  "repository": "https://github.com/hnxyhcz/folium-lx-music-source",
+  "bugs": "https://github.com/hnxyhcz/folium-lx-music-source/issues",
+  "description": "不自带、不下载任何脚本；脚本由用户自行提供并显式导入（URL 或本地文件），运行在 main 进程（node:vm），用于解析并替换 Folia 播放地址。",
+  "main": "index.cjs",
+  "client": "client.mjs",
+  "preview": "preview.png",
+  "permissions": ["net.fetch", "filesystem.data"],
+  "experimental": ["omni.hooks"],
+  "folia": ">=0.8.0"
+}

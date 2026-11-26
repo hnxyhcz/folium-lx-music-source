@@ -1,0 +1,33 @@
+{
+  "name": "folium-lx-music-source",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "洛雪音源适配层：脚本由用户自行导入，在 main 进程解析并替换 Folia 播放地址（Folium 2.0+）。",
+  "author": "hnxyhcz",
+  "license": "MIT",
+  "keywords": [
+    "folia",
+    "folium",
+    "lx-music",
+    "music-source",
+    "mod"
+  ],
+  "homepage": "https://github.com/hnxyhcz/folium-lx-music-source",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hnxyhcz/folium-lx-music-source.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hnxyhcz/folium-lx-music-source/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node test/runtime.test.mjs && node test/main.test.mjs && node test/proxy.test.mjs && node test/client.test.mjs && node test/scriptIdResolver.test.mjs",
+    "test:runner": "node --test test/*.test.mjs",
+    "probe": "node test/probe.mjs",
+    "check": "node ../../folia-major/dev/folium/check.mjs ./lx-music-source"
+  }
+}
