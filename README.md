@@ -6,7 +6,7 @@ The adapter layer that runs LX Music custom source scripts inside [Folia](https:
 
 ## 它做什么
 
-Folia 的内置音源（网易云 / 酷狗 / QQ）拿不到播放地址时（灰色、VIP、版权限制、接口失败），或者你选择「总是替换」时，适配层让 LX 音源脚本解析一个可播放直链，再交回 Folia 播放。
+Folia 的内置音源（网易云 / 酷狗 / QQ）拿不到播放地址时，或者你选择「总是替换」时，适配层让 LX 音源脚本解析一个可播放直链，再交回 Folia 播放。
 
 ```text
 Folia 播放 → Omni.getAudioSource → 内置 provider（netease / kugou / qq）
@@ -52,6 +52,7 @@ Folia 播放 → Omni.getAudioSource → 内置 provider（netease / kugou / qq�
 | 设置 | 默认 | 说明 |
 | --- | --- | --- |
 | 替换策略 | 仅兜底 | `不替换`：不改播放地址；`仅兜底`：内置源无地址时才用脚本（会员试听有地址，不会被替换）；`总是替换`：优先用脚本，试听/会员片段也替换。 |
+| 替换平台 | 全部关闭 | `[网易云]` / `[QQ 音乐]` / `[酷狗]` 三个开关按钮：**点亮=该平台走洛雪替换，熄灭=用内置原版**。 |
 | 目标音质 | 320k | `128k` / `320k` / `flac` / `flac24bit`。脚本声明了 `qualitys` 时，会选「不高于目标音质的最好一档」；没声明就按目标音质请求。 |
 | 请求超时 | 20000 ms | 单次脚本请求超时，3–60 秒；冷启动慢可调到 30–60 秒。 |
 
@@ -126,22 +127,6 @@ Folia 自己的音质名（如果调用方有）映射为：
 | `env` / `version` / `currentScriptInfo` | `'desktop'` / `'2.1.0'` / 脚本头信息。 |
 
 脚本里开的 `setTimeout` / `setInterval` 由运行时登记，模组重载或停用时统一清除，避免旧脚本继续轮询。
-
-## 与旧模组（0.1.0）的差别
-
-| 方面 | 旧模组 | 本项目 |
-| --- | --- | --- |
-| 设置句柄 | `section.params`（Folium 1.5 旧名，Folium 2 删除） | `section.settings`（Folium 2） |
-| 宿主版本检查 | 无 | 启动时检查 `folium.host.folium >= 2.0` |
-| 缓存键 | 只按音源 + 歌曲 id | 音源 + 歌曲 id + 音质，换音质不会拿到旧档位 |
-| 缓存清理 | 只在写入时按容量淘汰 | 过期 + LRU + 每分钟清理 + 设置变化时清空 |
-| 脚本元数据 | 只存名称 | 解析 `@name/@version/@description/@homepage` |
-| 请求超时 | 固定 15 秒 | 设置项可调（3–60 秒） |
-| 脚本定时器 | 不清理 | 运行时登记并在卸载时清除 |
-| `buffer.from` 编码 | 忽略 `encoding`，一律 UTF-8 | 支持 hex / base64 / UTF-8 |
-| 多脚本选择 | 每个脚本都试，失败才下一个 | 跳过未声明该音源的脚本；按列表顺序回退（可按住右侧 ⠿ 拖动调整顺序） |
-| 失败处理 | 无 | `playback.failed` 时丢弃可能过期的缓存，`play` 阶段重新预热 |
-| 测试 | 只有 probe | Node 单测（MD5 向量、编码、gz_ 解包、沙箱、签名、错误路径）+ probe |
 
 ## 开发与测试
 
